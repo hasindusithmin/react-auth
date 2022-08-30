@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 export default function Signin() {
-    const [email, setEmail] = useState(null)
-    const [password, setPassword] = useState(null)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const SignIn = e => {
         e.preventDefault()
     }

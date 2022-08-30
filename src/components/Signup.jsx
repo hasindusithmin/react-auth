@@ -4,9 +4,9 @@ import { useEffect,useState } from 'react';
 
 export default function Signup() {
 
-  const [username,setUsername] = useState(null)
-  const [email,setEmail] = useState(null)
-  const [password,setPassword] = useState(null)
+  const [username,setUsername] = useState('')
+  const [email,setEmail] = useState('')
+  const [password,setPassword] = useState('')
 
   useEffect(()=>{
     
@@ -23,7 +23,7 @@ export default function Signup() {
 
 
   return (
-    <div className='w3-row w3-container' id='main'>
+    <>
       <h1 className="w3-center">Sign Up</h1>
       <form action="" method="post" autoComplete='off' onSubmit={SignUp}>
         <input type="text" value={username} onChange={e=>{setUsername(e.target.value)}} className='w3-input w3-border' placeholder='username'/>
@@ -34,7 +34,7 @@ export default function Signup() {
         <br />
         <input type="submit" value="SignUp" className='w3-input w3-border'/>
       </form>
-    </div>
+    </>
   );
 }
 
