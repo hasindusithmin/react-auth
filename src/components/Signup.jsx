@@ -18,7 +18,7 @@ export default function Signup() {
 
     const SignUp = e => {
         e.preventDefault()
-        alert("submitted")
+        console.log({username,email,password});
     }
 
 
@@ -26,11 +26,11 @@ export default function Signup() {
         <>
             <h1 className="w3-center">Sign Up</h1>
             <form action="" method="post" autoComplete='off' onSubmit={SignUp}>
-                <input type="text" value={username} onChange={e => { setUsername(e.target.value) }} className='w3-input w3-border' placeholder='username' />
+                <input type="text" value={username} onChange={e => { setUsername(e.target.value) }} className='w3-input w3-border' placeholder='username' required/>
                 <br />
-                <input type="text" value={email} onChange={e => { setEmail(e.target.value) }} className='w3-input w3-border' placeholder='email' />
+                <input type="text" value={email} onChange={e => { setEmail(e.target.value) }} className='w3-input w3-border' placeholder='email' required/>
                 <br />
-                <input type="password" value={password} onChange={e => { setPassword(e.target.value) }} className='w3-input w3-border' placeholder='password' />
+                <input type="password" value={password} onChange={e => { setPassword(e.target.value) }} className='w3-input w3-border' placeholder='password' required/>
                 <br />
                 <input type="submit" value="SignUp" className='w3-input w3-border' />
             </form>
