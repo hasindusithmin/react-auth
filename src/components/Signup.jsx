@@ -23,12 +23,6 @@ export default function Signup() {
         e.preventDefault()
         document.getElementById('error-panel').innerText = ''
         const hash = AES.encrypt(password,process.env.REACT_APP_SECRET).toString()
-        const {data,error} = await supabase.from('users').insert({username,email,password:hash})
-        if (error) document.getElementById('error-panel').innerText = error.message;
-        const id = data[0].id
-        const token = jwt.sign({id},'shhhh',{expiresIn:3600})
-        Cookies.set('token',token)
-        if (data) window.location.reload()
     }
 
 
