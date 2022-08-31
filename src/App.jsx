@@ -5,7 +5,6 @@ import Signin from './components/Signin';
 import Signup from './components/Signup';
 import Cookies from 'js-cookie'
 import jwt from "jsonwebtoken"
-import supabase from './supabaseClient';
 
 function App() {
 
@@ -19,11 +18,9 @@ function App() {
     setOldUser(!oldUser)
   }
 
-  const fetch = async (decoded) => {
-    const { data } = await supabase.from('users').select().match({ id: decoded['id'] }).single()
-    const { email, username } = data;
-    setEmail(email)
-    setUsername(username)
+  const logout = ()=>{
+    Cookies.remove('token')
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -31,12 +28,27 @@ function App() {
       document.getElementById('main').style.cssText = 'width:50%;margin:auto;'
     }
     const token = Cookies.get('token')
-    jwt.verify(token, 'shhhh', (err, decoded) => {
-      if (!err) {
-        fetch(decoded)
-        setAuth(true)
-      }
-    })
+    if (token !== undefined) {
+      jwt.verify(token, process.env.REACT_APP_JWT, async (err, decoded) => {
+        if (err) {
+          alert(err.message)
+        }
+        else {
+          const { id } = decoded;
+          const res = await fetch(`https://data.mongodb-api.com/app/born-yahdr/endpoint/reactdb/users/read?secret=${process.env.REACT_APP_HTTP}&id=${id}`)
+          if (res.status === 404) {
+            alert("user not found")
+          }
+          else {
+            const { username, email } = await res.json()
+            setUsername(username)
+            setEmail(email)
+            setAuth(true)
+          }
+        }
+      })
+    }
+
 
   }, [])
 
@@ -62,6 +74,7 @@ function App() {
         <div id='w3-row'>
           <div>{username}</div>
           <div>{email}</div>
+          <button onClick={logout}>logout</button>
         </div>
       }
     </div>

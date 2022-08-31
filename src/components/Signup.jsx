@@ -1,6 +1,5 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import supabase from "../supabaseClient"
 import AES from "crypto-js/aes"
 import Cookies from 'js-cookie'
 import jwt from "jsonwebtoken"
@@ -22,7 +21,30 @@ export default function Signup() {
     const SignUp = async(e) => {
         e.preventDefault()
         document.getElementById('error-panel').innerText = ''
-        const hash = AES.encrypt(password,process.env.REACT_APP_SECRET).toString()
+        // Hash the password 
+        const hash = AES.encrypt(password,process.env.REACT_APP_AES).toString()
+        // Http requets 
+        const res = await fetch(`https://data.mongodb-api.com/app/born-yahdr/endpoint/reactdb/users/add?secret=${process.env.REACT_APP_HTTP}`,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({username,email,password:hash})
+        })
+
+        if (res.status === 400) {
+            const {error} = await res.json()
+            document.getElementById('error-panel').innerText = error
+        }
+
+        if (res.status === 201) {
+            const {insertedId} = await res.json()
+            const token = jwt.sign({id:insertedId},process.env.REACT_APP_JWT,{expiresIn:3600})
+            // Set cookie 
+            Cookies.set('token',token,{expires:1})
+            // Reload 
+            window.location.reload()
+        }
     }
 
 
@@ -33,7 +55,7 @@ export default function Signup() {
                 <div className="w3-text-red" id='error-panel'></div>
                 <input type="text" value={username} onChange={e => { setUsername(e.target.value) }} className='w3-input w3-border' placeholder='username' required/>
                 <br />
-                <input type="text" value={email} onChange={e => { setEmail(e.target.value) }} className='w3-input w3-border' placeholder='email' required/>
+                <input type="email" value={email} onChange={e => { setEmail(e.target.value) }} className='w3-input w3-border' placeholder='email' required/>
                 <br />
                 <input type="password" value={password} onChange={e => { setPassword(e.target.value) }} className='w3-input w3-border' placeholder='password' required/>
                 <br />
