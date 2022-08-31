@@ -15,8 +15,8 @@ function App() {
   const [auth, setAuth] = useState(false)
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
-  const [posts, setPosts] = useState([])
-  const [comments, setComments] = useState([])
+  const [posts, setPosts] = useState(null)
+  const [comments, setComments] = useState(null)
 
   const transfer = () => {
     setOldUser(!oldUser)
@@ -40,7 +40,7 @@ function App() {
     fetch('https://jsonplaceholder.typicode.com/posts?userId=1')
       .then(res => res.json())
       .then(data => {
-        setComments([])
+        setComments(null)
         setPosts(data)
       })
   }
@@ -49,7 +49,7 @@ function App() {
     fetch(`https://jsonplaceholder.typicode.com/comments?postId=${id}`)
       .then(res => res.json())
       .then(data => {
-        setPosts([])
+        setPosts(null)
         setComments(data)
       })
   }
@@ -133,15 +133,16 @@ function App() {
           {
             comments
             &&
-            (<>
-              <button className="w3-button w3-block" onClick={post}>Back</button>
+            <>
               <ul className='w3-ul w3-card-4 w3-margin-top'>
                 {comments.map(comment => <Comment comment={comment} />)}
               </ul>
-            </>)
+              {!posts && <button className="w3-button w3-block" onClick={post}>&larr; Back</button>}
+            </>
           }
         </div>
       }
+      <br />
     </div>
   );
 }
