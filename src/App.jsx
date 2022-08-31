@@ -18,9 +18,18 @@ function App() {
     setOldUser(!oldUser)
   }
 
-  const logout = ()=>{
+  const logout = () => {
     Cookies.remove('token')
     window.location.reload()
+  }
+
+  const w3_open = () => {
+    document.getElementById("mySidebar").style.width = "100%";
+    document.getElementById("mySidebar").className = 'w3-sidebar w3-bar-block w3-border-right'
+  }
+
+  const w3_close = () => {
+    document.getElementById("mySidebar").className = 'w3-sidebar w3-bar-block w3-border-right w3-hide'
   }
 
   useEffect(() => {
@@ -72,9 +81,24 @@ function App() {
         auth
         &&
         <div id='w3-row'>
-          <div>{username}</div>
-          <div>{email}</div>
-          <button onClick={logout}>logout</button>
+          <div className="w3-bar w3-border w3-light-grey w3-margin-top w3-hide-small">
+            <button  className="w3-bar-item w3-button w3-text-teal">Home</button>
+            <button  className="w3-bar-item w3-button">Link 1</button>
+            <button  className="w3-bar-item w3-button">Link 2</button>
+            <button  className="w3-bar-item w3-button w3-right" onClick={logout}>Logout</button>
+            <button  className="w3-bar-item w3-button w3-right">{email}</button>
+          </div>
+          <div className="w3-sidebar w3-bar-block w3-border-right w3-hide" id="mySidebar">
+            <button onClick={w3_close} className="w3-bar-item w3-large w3-text-red w3-bold">Close &times;</button>
+            <button  className="w3-bar-item w3-button w3-text-teal">Home</button>
+            <button  className="w3-bar-item w3-button">Link 2</button>
+            <button  className="w3-bar-item w3-button">Link 3</button>
+          </div>
+          <div className="w3-light-grey w3-margin-top w3-hide-large">
+            <button className="w3-button  w3-xlarge" onClick={w3_open}>☰</button>
+            <button className="w3-button  w3-xlarge w3-right" onClick={logout}>Logout</button>
+            <button className="w3-button  w3-xlarge w3-right">{username}</button>
+          </div>
         </div>
       }
     </div>
