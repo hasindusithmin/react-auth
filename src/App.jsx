@@ -5,6 +5,7 @@ import Signin from './components/Signin';
 import Signup from './components/Signup';
 import Cookies from 'js-cookie'
 import jwt from "jsonwebtoken"
+import Chart from './components/Chart';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
   const [auth, setAuth] = useState(false)
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
+  const [posts,setPosts] = useState([])
 
   const transfer = () => {
     setOldUser(!oldUser)
@@ -32,6 +34,8 @@ function App() {
     document.getElementById("mySidebar").className = 'w3-sidebar w3-bar-block w3-border-right w3-hide'
   }
 
+  const comment = ()=>{}
+
   useEffect(() => {
     if (!(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i))) {
       document.getElementById('main').style.cssText = 'width:50%;margin:auto;'
@@ -49,6 +53,11 @@ function App() {
             alert("user not found")
           }
           else {
+            fetch('https://jsonplaceholder.typicode.com/posts?userId=1')
+              .then(res=>res.json())
+              .then(data=>{
+                  setPosts(data)
+              })
             const { username, email } = await res.json()
             setUsername(username)
             setEmail(email)
@@ -99,6 +108,9 @@ function App() {
             <button className="w3-button  w3-xlarge w3-right" onClick={logout}>Logout</button>
             <button className="w3-button  w3-xlarge w3-right">{username}</button>
           </div>
+          <ul className='w3-ul w3-card-4 w3-margin-top'>
+              {posts.map(post => <Chart post={post} comment={comment}/>)}
+          </ul>
         </div>
       }
     </div>
